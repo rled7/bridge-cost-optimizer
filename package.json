@@ -1,0 +1,11 @@
+{
+  "name": "bridge-cost-optimizer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Cross-chain bridge cost optimizer — ranks bridge routes by net capital preserved (3-layer fee math) with a QA flag for unreasonable fees.",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node test/costEngine.test.js"
+  }
+}
