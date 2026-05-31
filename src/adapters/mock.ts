@@ -3,22 +3,25 @@
 // multiplied on Ethereum L1 to reflect real-world expense — this makes the "cheapest
 // route depends on transfer size" lesson visible in the demo.
 
-/** @typedef {import('../types.js').RouteQuery} RouteQuery */
-/** @typedef {import('../types.js').RawRoute} RawRoute */
+import type { RouteQuery, RawRoute } from '../types.js';
 
-const BASE = [
+interface BridgeBase {
+  bridge: string;
+  sourceGasUsd: number;
+  destGasUsd: number;
+  feeRate: number;
+  etaSeconds: number;
+}
+
+const BASE: BridgeBase[] = [
   // bridge,    srcGas, dstGas, feeRate (of amount), eta(s)
   { bridge: 'across',   sourceGasUsd: 4.0, destGasUsd: 0.5, feeRate: 0.0006, etaSeconds: 120 },
-  { bridge: 'stargate', sourceGasUsd: 5.0, destGasUsd: 0.8, feeRate: 0.0010, etaSeconds: 90 },
+  { bridge: 'stargate', sourceGasUsd: 5.0, destGasUsd: 0.8, feeRate: 0.0010, etaSeconds: 90  },
   { bridge: 'cctp',     sourceGasUsd: 6.0, destGasUsd: 1.0, feeRate: 0.0001, etaSeconds: 900 },
   { bridge: 'hop',      sourceGasUsd: 4.5, destGasUsd: 0.6, feeRate: 0.0018, etaSeconds: 300 },
 ];
 
-/**
- * @param {RouteQuery} q
- * @returns {RawRoute[]}
- */
-export function getMockRoutes(q) {
+export function getMockRoutes(q: RouteQuery): RawRoute[] {
   // Ethereum L1 source gas is dramatically more expensive than L2s.
   const srcMultiplier = q.fromChain === 'ethereum' ? 4 : 1;
   const dstMultiplier = q.toChain === 'ethereum' ? 4 : 1;
@@ -34,4 +37,4 @@ export function getMockRoutes(q) {
   }));
 }
 
-const round = (n) => Math.round(n * 100) / 100;
+const round = (n: number): number => Math.round(n * 100) / 100;

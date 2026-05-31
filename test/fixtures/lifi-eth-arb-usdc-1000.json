@@ -1,0 +1,146 @@
+{
+  "_note": "Hand-authored fixture matching LI.FI /v1/quote response shape (live call was not available during build). Fields match documented shape: estimate.gasCosts, estimate.feeCosts, toAmount, toAmountUSD, toolDetails.name, estimate.executionDuration.",
+  "id": "0xabc123fixture",
+  "type": "CROSS_CHAIN",
+  "tool": "across",
+  "toolDetails": {
+    "key": "across",
+    "name": "Across",
+    "logoURI": "https://example.com/across.png"
+  },
+  "action": {
+    "fromChainId": 1,
+    "toChainId": 42161,
+    "fromToken": {
+      "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "symbol": "USDC",
+      "decimals": 6,
+      "chainId": 1
+    },
+    "toToken": {
+      "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "symbol": "USDC",
+      "decimals": 6,
+      "chainId": 42161
+    },
+    "fromAmount": "1000000000",
+    "toAmount": "998700000",
+    "slippage": 0.005
+  },
+  "estimate": {
+    "tool": "across",
+    "fromAmount": "1000000000",
+    "toAmount": "998700000",
+    "toAmountMin": "995706500",
+    "toAmountUSD": "998.70",
+    "fromAmountUSD": "1000.00",
+    "approvalAddress": "0x1111111254EEB25477B68fb85Ed929f73A960582",
+    "feeCosts": [
+      {
+        "name": "Across LP Fee",
+        "description": "Liquidity provider fee for the Across bridge",
+        "token": {
+          "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+          "symbol": "USDC",
+          "decimals": 6,
+          "chainId": 1
+        },
+        "amount": "600000",
+        "amountUSD": "0.60",
+        "percentage": "0.0006",
+        "included": true
+      }
+    ],
+    "gasCosts": [
+      {
+        "type": "SEND",
+        "price": "15000000000",
+        "estimate": "200000",
+        "limit": "250000",
+        "amount": "3000000000000000",
+        "amountUSD": "16.00",
+        "token": {
+          "address": "0x0000000000000000000000000000000000000000",
+          "symbol": "ETH",
+          "decimals": 18,
+          "chainId": 1
+        }
+      }
+    ],
+    "executionDuration": 120,
+    "fromAmountUSDValue": 1000.0,
+    "toAmountUSDValue": 998.7
+  },
+  "includedSteps": [
+    {
+      "id": "step-1",
+      "type": "cross",
+      "tool": "across",
+      "toolDetails": {
+        "key": "across",
+        "name": "Across",
+        "logoURI": "https://example.com/across.png"
+      },
+      "action": {
+        "fromChainId": 1,
+        "toChainId": 42161,
+        "fromToken": {
+          "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+          "symbol": "USDC",
+          "decimals": 6,
+          "chainId": 1
+        },
+        "toToken": {
+          "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          "symbol": "USDC",
+          "decimals": 6,
+          "chainId": 42161
+        },
+        "fromAmount": "1000000000",
+        "toAmount": "998700000",
+        "slippage": 0.005
+      },
+      "estimate": {
+        "tool": "across",
+        "fromAmount": "1000000000",
+        "toAmount": "998700000",
+        "toAmountMin": "995706500",
+        "toAmountUSD": "998.70",
+        "approvalAddress": "0x1111111254EEB25477B68fb85Ed929f73A960582",
+        "feeCosts": [
+          {
+            "name": "Across LP Fee",
+            "description": "Liquidity provider fee for the Across bridge",
+            "token": {
+              "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+              "symbol": "USDC",
+              "decimals": 6,
+              "chainId": 1
+            },
+            "amount": "600000",
+            "amountUSD": "0.60",
+            "percentage": "0.0006",
+            "included": true
+          }
+        ],
+        "gasCosts": [
+          {
+            "type": "SEND",
+            "price": "15000000000",
+            "estimate": "200000",
+            "limit": "250000",
+            "amount": "3000000000000000",
+            "amountUSD": "16.00",
+            "token": {
+              "address": "0x0000000000000000000000000000000000000000",
+              "symbol": "ETH",
+              "decimals": 18,
+              "chainId": 1
+            }
+          }
+        ],
+        "executionDuration": 120
+      }
+    }
+  ]
+}

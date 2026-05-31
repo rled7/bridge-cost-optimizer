@@ -1,11 +1,25 @@
 {
   "name": "bridge-cost-optimizer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "Cross-chain bridge cost optimizer — ranks bridge routes by net capital preserved (3-layer fee math) with a QA flag for unreasonable fees.",
   "scripts": {
-    "start": "node src/server.js",
-    "test": "node test/costEngine.test.js"
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx/esm --test test/costEngine.test.ts test/lifi.test.ts"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.0",
+    "tsx": "^4.15.6",
+    "typescript": "^5.4.5"
   }
 }

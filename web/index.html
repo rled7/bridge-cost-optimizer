@@ -1,96 +1,12 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bridge Cost Optimizer</title>
-  <style>
-    :root { color-scheme: dark; }
-    * { box-sizing: border-box; }
-    body { margin: 0; font: 15px/1.5 system-ui, sans-serif; background: #0d1117; color: #e6edf3; }
-    .wrap { max-width: 880px; margin: 0 auto; padding: 32px 20px; }
-    h1 { font-size: 22px; margin: 0 0 4px; }
-    .sub { color: #8b949e; margin: 0 0 24px; }
-    form { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; align-items: end; }
-    label { display: block; font-size: 12px; color: #8b949e; margin-bottom: 4px; }
-    select, input, button { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #30363d; background: #161b22; color: #e6edf3; font: inherit; }
-    button { background: #238636; border-color: #238636; cursor: pointer; font-weight: 600; }
-    button:hover { background: #2ea043; }
-    table { width: 100%; border-collapse: collapse; margin-top: 24px; }
-    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #21262d; font-variant-numeric: tabular-nums; }
-    th { color: #8b949e; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
-    .best { color: #3fb950; font-weight: 700; }
-    .flag { background: #da3633; color: #fff; border-radius: 4px; padding: 1px 6px; font-size: 11px; margin-left: 6px; }
-    .fees { color: #8b949e; font-size: 12px; }
-    .err { color: #f85149; margin-top: 16px; }
-    .meta { color: #8b949e; font-size: 12px; margin-top: 8px; }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <h1>Cross-Chain Bridge Cost Optimizer</h1>
-    <p class="sub">Ranks routes by <strong>net capital preserved</strong> after source gas + destination gas + protocol fee. Flags unreasonable fees (QA).</p>
-
-    <form id="f">
-      <div><label>From</label><select id="from"></select></div>
-      <div><label>To</label><select id="to"></select></div>
-      <div><label>Token</label><input id="token" value="USDC" /></div>
-      <div><label>Amount</label><input id="amount" type="number" value="1000" min="1" /></div>
-      <div><button type="submit">Find routes</button></div>
-    </form>
-
-    <div id="meta" class="meta"></div>
-    <div id="out"></div>
-  </div>
-
-  <script>
-    const CHAINS = ['ethereum', 'arbitrum', 'optimism', 'base', 'polygon', 'bsc'];
-    const $ = (id) => document.getElementById(id);
-    CHAINS.forEach((c) => {
-      $('from').add(new Option(c, c));
-      $('to').add(new Option(c, c));
-    });
-    $('from').value = 'ethereum';
-    $('to').value = 'arbitrum';
-
-    const fmt = (n) => '$' + Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    const eta = (s) => (s >= 60 ? Math.round(s / 60) + 'm' : s + 's');
-
-    $('f').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      $('out').innerHTML = '';
-      $('meta').textContent = 'Loading…';
-      const params = new URLSearchParams({
-        from: $('from').value, to: $('to').value, token: $('token').value, amount: $('amount').value,
-      });
-      try {
-        const res = await fetch('/api/routes?' + params);
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'request failed');
-        render(data);
-      } catch (err) {
-        $('meta').textContent = '';
-        $('out').innerHTML = '<div class="err">' + err.message + '</div>';
-      }
-    });
-
-    function render(data) {
-      const { routes, cached } = data;
-      $('meta').textContent = `${routes.length} routes • ${cached ? 'cached' : 'fresh'} • amount in ${fmt(routes[0].amountInUsd)}`;
-      const rows = routes.map((r, i) => `
-        <tr>
-          <td>${r.bridge}${i === 0 ? '' : ''}${r.flagged ? '<span class="flag">unreasonable fee</span>' : ''}</td>
-          <td class="${i === 0 ? 'best' : ''}">${fmt(r.amountOutUsd)}${i === 0 ? ' ⭐' : ''}</td>
-          <td class="fees">src ${fmt(r.fees.sourceGasUsd)} · dst ${fmt(r.fees.destGasUsd)} · fee ${fmt(r.fees.protocolFeeUsd)}</td>
-          <td>${(r.effectiveCostBps / 100).toFixed(3)}%</td>
-          <td>${eta(r.etaSeconds)}</td>
-        </tr>`).join('');
-      $('out').innerHTML = `
-        <table>
-          <thead><tr><th>Bridge</th><th>Net received</th><th>Cost breakdown (3 layers)</th><th>Eff. cost</th><th>ETA</th></tr></thead>
-          <tbody>${rows}</tbody>
-        </table>`;
-    }
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bridge Cost Optimizer</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
