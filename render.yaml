@@ -1,0 +1,16 @@
+# Render blueprint — deploys the Express API.
+# Render injects PORT; src/server.ts already listens on process.env.PORT (falls back to 5050 locally).
+services:
+  - type: web
+    name: bridge-cost-optimizer-api
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/routes?from=ethereum&to=arbitrum&token=USDC&amount=1000
+    envVars:
+      - key: ADAPTER
+        value: mock   # keyless demo mode; set to "lifi" for live LI.FI quotes
+      - key: NODE_VERSION
+        value: "20"
