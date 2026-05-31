@@ -57,3 +57,8 @@ To switch, set `ADAPTER=lifi` once `src/adapters/lifi.js` exists. No other code 
 - The `flagged` signal automates the job's "notice the unreasonable fee and log it" QA requirement.
 
 See `PLAN.md` for the full execution spec (sub-agent tasks, acceptance criteria, decisions).
+
+---
+
+## ⚠️ Deployment note (2026-05-31)
+This repo is structured for a **Node/Express host** (e.g. Render/Vercel serverless). It was **not** the right structure for the deployment we settled on. Since the portfolio domain `remberllc.com` is hosted on **Cloudflare**, a Cloudflare-native version was created instead — see **`bridge-cost-optimizer-cloudflare`** (Cloudflare Pages + Pages Functions). This repo remains as the reference Node implementation. `render.yaml` here is unused.
