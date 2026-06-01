@@ -6,6 +6,24 @@ Ranks bridge routes by **net capital preserved** — decomposing the true cost i
 
 ---
 
+## Why I built it
+
+When you move stablecoins across chains, the headline bridge fee lies — your real cost is **source-chain gas + destination-chain gas + the bridge's protocol fee/spread**, and which route wins *changes with transfer size*. Most UIs surface one number and let you eat the rest as slippage. This tool decomposes all three layers into a single comparable metric (`effectiveCostBps` — basis points of capital lost) so you can rank routes by **net capital preserved**, and it auto-**flags** any route whose effective cost is unreasonable. It's equal parts a capital-efficiency tool and a QA instrument.
+
+## Technology choices (and what I chose against)
+
+| Decision | Chosen | Considered instead | Why |
+|---|---|---|---|
+| Language | **TypeScript** | plain JS | The domain is full of money math and nested fee objects; static types catch unit/shape bugs (bps vs %, USD vs token) before runtime. |
+| Cost engine | **Pure, dependency-free functions** | a pricing SDK / framework | The 3-layer math is the product's core IP — keeping it pure makes it trivially unit-testable, deterministic, and adapter-agnostic. |
+| Data source | **LI.FI aggregator** (M2) behind an **adapter interface** | calling Across/Stargate/Hop/CCTP directly | One integration covers many bridges, and the adapter boundary means the engine never knows or cares where quotes come from — `mock` for offline/deterministic tests, `lifi` for live. |
+| Tests | **`node:test`** (built-in) | Jest / Vitest | Zero-dependency, zero-config, instant — appropriate for a focused engine. No reason to pull a 200-package test framework for pure functions. |
+| Backend (M2) | **Express** | NestJS / raw `http` | A single `/api/routes` endpoint doesn't justify Nest's ceremony; Express is the right weight, and it's a stack recruiters recognize instantly. |
+| Frontend | **React + Vite + TS** | Next.js / CRA | No SSR/routing needs — just a fast SPA. Vite's dev server and build are far leaner than Next for a single-view tool; CRA is effectively deprecated. |
+| Hosting | **Cloudflare Pages + Pages Functions** | Render / Vercel | The portfolio domain already lives on Cloudflare, so a Pages Function keeps the API same-origin (no CORS, no second host) and free at the edge. See the deployment note below. |
+
+---
+
 ## Run it (M1 — zero dependencies)
 
 ```bash
